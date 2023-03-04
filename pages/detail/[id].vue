@@ -5,8 +5,8 @@
   <p>Hello, this is content</p>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 p {
-  color: $linkColor;
+  color: var(--link-color);
 }
 </style>
