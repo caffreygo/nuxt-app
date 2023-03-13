@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import matter from 'gray-matter';
+import matter from "gray-matter";
 
 // 文章目录
 const postsDir = path.join(process.cwd(), "content");
@@ -13,10 +13,10 @@ export default defineEventHandler((event) => {
 
     // 获取文章标题和创建日期
     const fullPath = path.join(postsDir, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const fileContents = fs.readFileSync(fullPath, "utf8");
     const matterInfo = matter(fileContents);
     console.log(matterInfo);
-    
+
     const fileInfo = fs.statSync(fullPath);
 
     return {
@@ -25,6 +25,14 @@ export default defineEventHandler((event) => {
       date: fileInfo.ctime,
     };
   });
+
+  // 获取当前页码 page
+  const query = getQuery(event);
+  const page = Number(query.page);
+  const size = Number(query.size);
+
+  const start = (page - 1) * size;
+  const end = start + size;
   // 降序排列
-  return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return posts.sort((a, b) => (a.date < b.date ? 1 : -1)).slice(start, end);
 });
