@@ -8,7 +8,16 @@ import html from "remark-html";
 const postsDir = path.join(process.cwd(), "content");
 
 export default defineEventHandler(async (event) => {
-  const fileName = getRouterParam(event, 'id') + ".md";
+  // url路由参数
+  console.log(getRouterParam(event, "id"));
+  const fileName = getRouterParam(event, "id") + ".md";
+
+  // 获取请求体参数
+  // const body = await readBody(event)
+
+  // 获取查询参
+  // const query = getQuery(event)
+  // query.param1
 
   // 获取文章内容
   const fullPath = path.join(postsDir, fileName);
@@ -26,17 +35,3 @@ export default defineEventHandler(async (event) => {
     content,
   };
 });
-
-
-
-// $fetch('/api/create-post', { method: 'post', body: { id: 'new id' } })
-// export default defineEventHandler(async (event) => {
-//     const body = await readBody(event)
-//     return { body }
-// }
-
-// /api/query?param1=a&param2=b
-// export default defineEventHandler((event) => {
-//   const query = getQuery(event)
-//   return { a: query.param1, b: query.param2 }
-// })

@@ -1,9 +1,16 @@
 <template>
+  <!-- <h1>Index Page</h1>
+  <BaseFooButton></BaseFooButton>
+  <div>
+    <NButton>hello</NButton>
+  </div>
+</NuxtLink> -->
   <div class="flex items-center flex-col gap-2 py-4">
-    <!-- 处理请求错误 -->
-    <div v-if="error" class="text-red-300">{{ error.message }}</div>
-    <!-- 处理加载状态 -->
+    <!-- 错误处理 -->
+    <div v-if="error">{{ error.message }}</div>
+    <!-- 加载状态显示 -->
     <div v-if="pending">加载中...</div>
+    
     <div v-else>
       <div v-for="post in posts" :key="post.id">
         <NuxtLink class="text-lg" :to="`/detail/${post.id}`">{{
@@ -11,28 +18,28 @@
         }}</NuxtLink>
         <p class="text-slate-500">发布于: {{ post.date }}</p>
       </div>
+
+      <!-- 分页按钮 -->
+      <NButton @click="prev">上一页</NButton>
+      <NButton @click="next">下一页</NButton>
     </div>
-    <button @click="prev">Prev</button>
-    <button @click="next">Next</button>
   </div>
 </template>
 
 <script setup lang="ts">
 // const posts = await $fetch("/api/posts");
-// const { data: posts, pending, error } = await useFetch("/api/posts");
 const page = ref(1);
 const {
   data: posts,
   pending,
   error,
-  refresh, // 获取刷新函数
-} = await useFetch(() => `/api/posts?page=${page.value}&size=2`); // 注意修改为工厂函数方式
+  refresh,
+} = await useFetch(() => `/api/posts?page=${page.value}`);
 
 function prev() {
   page.value--;
   refresh();
 }
-
 function next() {
   page.value++;
   refresh();
